@@ -13,12 +13,22 @@
       <div id="unity-loading-bar">
         <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
         <dotlottie-wc src="https://lottie.host/7d6082d8-8563-4dee-b5d1-a8498a6ad3a1/rOuTF0xfpF.lottie" style="width: 300px;height: 300px" speed="1" autoplay loop></dotlottie-wc>
+        <!-- <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty"> -->
+          <!-- <div id="unity-progress-bar-full"></div> -->
         </div>
       </div>
       <div id="unity-warning"> </div>
     </div>
     <script>
       var canvas = document.querySelector("#unity-canvas");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
       function unityShowBanner(msg, type) {
         var warningBanner = document.querySelector("#unity-warning");
         function updateBannerVisibility() {
@@ -39,18 +49,34 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Obay_Naeem_Portfolio_Build.loader.js";
+      var loaderUrl = buildUrl + "/Obay Naeem portfolio v1.1.loader.js";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/Obay_Naeem_Portfolio_Build.data",
-        frameworkUrl: buildUrl + "/Obay_Naeem_Portfolio_Build.framework.js",
-        codeUrl: buildUrl + "/Obay_Naeem_Portfolio_Build.wasm",
+        dataUrl: buildUrl + "/Obay Naeem portfolio v1.1.data",
+        frameworkUrl: buildUrl + "/Obay Naeem portfolio v1.1.framework.js",
+        codeUrl: buildUrl + "/Obay Naeem portfolio v1.1.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "Obay_Naeem_Portfolio",
         productVersion: "0.1.0",
         showBanner: unityShowBanner,
       };
+
+      // By default, Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      // If you would like all file writes inside Unity Application.persistentDataPath
+      // directory to automatically persist so that the contents are remembered when
+      // the user revisits the site the next time, uncomment the following line:
+      // config.autoSyncPersistentDataPath = true;
+      // This autosyncing is currently not the default behavior to avoid regressing
+      // existing user projects that might rely on the earlier manual
+      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
+      // expected to change.
 
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         // Mobile device style: fill the whole browser client area with the game canvas:
@@ -78,8 +104,13 @@
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
+          // document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
               }).then((unityInstance) => {
                 document.querySelector("#unity-loading-bar").style.display = "none";
+                // document.querySelector("#unity-fullscreen-button").onclick = () => {
+                //   unityInstance.SetFullscreen(1);
+                // };
+
               }).catch((message) => {
                 alert(message);
               });
